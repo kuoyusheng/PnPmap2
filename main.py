@@ -46,11 +46,11 @@ if uploaded_file is not None:
     dieRow = st.sidebar.number_input('Die Row number:', value = 5, format = '%i')
     dieCol = st.sidebar.number_input('Die Col number:', value = 2, format = '%i')
     # Add sort rule
-    #rule = st.sidebar.text_input('Sort Rule', placeholder='Write sort rule based on python logic, seperated by newline("\n")')
+    # rule = st.sidebar.text_input('Sort Rule', placeholder='Write sort rule based on python logic, seperated by newline("\n")')
 
     clicked = st.sidebar.button(label="Plot", )
 
-    if clicked:
+    if clicked is not None:
         st.header("Wafer Map")
         st.subheader('LOT:{} Wafer:{}'.format("B47052", wafer_select))
         wmap = fill_wafer_map(yield_df[yield_df.Wafer == int(wafer_select)],ReticleRow,ReticleCol,retmap, sort_bin)
