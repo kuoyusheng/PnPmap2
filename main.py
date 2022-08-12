@@ -5,6 +5,7 @@ import numpy as np
 
 retmap = np.array([['A', 'B'], ['C', 'D'], ['E', 'F'], ['G', 'H'], ['I', 'J']])
 sort_bin = {1: 'AA', 0.5: 'BB', 0.25:'CC',0.1:'DD', 0: "FF", 'unbonded': "01", 'PCM': "@@"}
+sort_key = {"__": np.nan, "01": 0.1, "FF":0.2, "BB":0.3, "AA":0.4,'CC':0.6,'DD':0.7, "@@":0.9}
 st.set_page_config(layout="wide")
 
 
@@ -55,7 +56,7 @@ if uploaded_file is not None:
         st.subheader('LOT:{} Wafer:{}'.format("B47052", wafer_select))
         wmap = fill_wafer_map(yield_df[yield_df.Wafer == int(wafer_select)],ReticleRow,ReticleCol,retmap, sort_bin)
         rcid_map = fill_wafer_map_rcid(ReticleRow, ReticleCol, retmap)
-        wmap_fig = plot_wafer_map(wmap,rcid_map, sort_key = {"__": np.nan, "01": 0.1, "FF":0.3, "BB":0.5, "AA":0.7, "@@":0.9})
+        wmap_fig = plot_wafer_map(wmap,rcid_map, sort_key = sort_key)
         st.write(wmap_fig)
         wmap_txt = create_sinf(wmap, "B47052", wafer_select, )
         rcid_txt = create_rcid(rcid_map,"B47052", wafer_select,)
