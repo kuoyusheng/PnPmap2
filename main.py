@@ -4,7 +4,7 @@ from create_map import fill_wafer_map,plot_wafer_map, fill_wafer_map_rcid
 import numpy as np
 
 retmap = np.array([['A', 'B'], ['C', 'D'], ['E', 'F'], ['G', 'H'], ['I', 'J']])
-sort_bin = {1: 'AA', 0.5: 'BB', 0: "FF", 'unbonded': "01", 'PCM': "@@"}
+sort_bin = {1: 'AA', 0.5: 'BB', 0.25:'CC',0.1:'DD', 0: "FF", 'unbonded': "01", 'PCM': "@@"}
 st.set_page_config(layout="wide")
 
 
