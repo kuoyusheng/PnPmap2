@@ -27,6 +27,13 @@ def fill_wafer_map(df, nrow, ncol, retmap, sort_bin):
                         map[(r+1)*retmap.shape[0]-1, (c+1)*retmap.shape[1]-1] = sort_bin['PCM']
     return map
 
+def create_color_map(sort_bin):
+    arr = np.linspace(0,1,len(sort_bin)+1)
+    sort_key = {}
+    for i in arr:
+        sort_key[i] = sort_bin[i]
+    sort_key[1] = "@@"
+        
 
 def discrete_colorscale(bvals, colors):
     """
