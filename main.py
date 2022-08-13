@@ -38,6 +38,7 @@ if uploaded_file is not None:
     #st.write(yield_df)
 
     # Add Wafer select
+    lot = st.text_input()
     wafer_select = ""
     if yield_df.Wafer.unique().tolist():
         wafer_select = st.sidebar.selectbox('Select Wafer', yield_df.Wafer.unique())
@@ -53,13 +54,13 @@ if uploaded_file is not None:
 
     if clicked is not None:
         st.header("Wafer Map")
-        st.subheader('LOT:{} Wafer:{}'.format("B47052", wafer_select))
+        st.subheader('LOT:{} Wafer:{}'.format(lot, wafer_select))
         wmap = fill_wafer_map(yield_df[yield_df.Wafer == int(wafer_select)],ReticleRow,ReticleCol,retmap, sort_bin)
         rcid_map = fill_wafer_map_rcid(ReticleRow, ReticleCol, retmap)
         wmap_fig = plot_wafer_map(wmap,rcid_map, sort_key = sort_key)
         st.write(wmap_fig)
-        wmap_txt = create_sinf(wmap, "B47052", wafer_select, )
-        rcid_txt = create_rcid(rcid_map,"B47052", wafer_select,)
+        wmap_txt = create_sinf(wmap, lot, wafer_select, )
+        rcid_txt = create_rcid(rcid_map,lot, wafer_select,)
         st.download_button(
              label="Download SINF file",
              data=wmap_txt,
