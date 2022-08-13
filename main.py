@@ -38,7 +38,7 @@ if uploaded_file is not None:
     #st.write(yield_df)
 
     # Add Wafer select
-    lot = st.text_input("LOT",placeholder = "L000000")
+    lot = st.sidebar.text_input("LOT",placeholder = "L000000")
     wafer_select = ""
     if yield_df.Wafer.unique().tolist():
         wafer_select = st.sidebar.selectbox('Select Wafer', yield_df.Wafer.unique())
