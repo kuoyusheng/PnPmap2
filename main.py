@@ -64,13 +64,13 @@ if uploaded_file is not None:
         st.download_button(
              label="Download SINF file",
              data=wmap_txt,
-             file_name='PnP_{}_{}.txt'.format("B47052", wafer_select),
+             file_name='PnP_{}_{}.txt'.format(lot, wafer_select),
              mime='text/csv',
          )
         st.download_button(
             label="Download RCID file",
             data=rcid_txt,
-            file_name='RCID_{}_{}.txt'.format("B47052", wafer_select),
+            file_name='RCID_{}_{}.txt'.format(lot, wafer_select),
             mime='text/csv',
         )
 
