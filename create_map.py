@@ -1,8 +1,25 @@
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-import streamlit as st
+import seaborn as sns
+import matplotlib.pyplot as plt
+import plotly.express as px
 
+def discrete_colorscale(bvals, colors):
+    """
+    bvals - list of values bounding intervals/ranges of interest
+    colors - list of rgb or hex colorcodes for values in [bvals[k], bvals[k+1]],0<=k < len(bvals)-1
+    returns the plotly  discrete colorscale
+    """
+    if len(bvals) != len(colors) + 1:
+        raise ValueError('len(boundary values) should be equal to  len(colors)+1 while now {} {}'.format(len(bvals), len(colors)))
+    bvals = sorted(bvals)
+    nvals = [(v - bvals[0]) / (bvals[-1] - bvals[0]) for v in bvals]  # normalized values
+
+    dcolorscale = []  # discrete colorscale
+    for k in range(len(colors)):
+        dcolorscale.extend([[nvals[k], colors[k]], [nvals[k + 1], colors[k]]])
+    return dcolorscale
 
 def fill_wafer_map(df, nrow, ncol, retmap, sort_bin):
     map = np.full((nrow*retmap.shape[0], ncol*retmap.shape[1]),"__")
@@ -33,35 +50,29 @@ def create_color_map(sort_bin):
     for i in arr:
         sort_key[i] = sort_bin[i]
     sort_key[1] = "@@"
-        
 
-def discrete_colorscale(bvals, colors):
-    """
-    bvals - list of values bounding intervals/ranges of interest
-    colors - list of rgb or hex colorcodes for values in [bvals[k], bvals[k+1]],0<=k < len(bvals)-1
-    returns the plotly  discrete colorscale
-    """
-    if len(bvals) != len(colors) + 1:
-        raise ValueError('len(boundary values) should be equal to  len(colors)+1')
-    bvals = sorted(bvals)
-    nvals = [(v - bvals[0]) / (bvals[-1] - bvals[0]) for v in bvals]  # normalized values
 
-    dcolorscale = []  # discrete colorscale
-    for k in range(len(colors)):
-        dcolorscale.extend([[nvals[k], colors[k]], [nvals[k + 1], colors[k]]])
-    return dcolorscale
 
-@st.cache
-def plot_wafer_map(wmap, rcid_map, sort_key):
-    new_wmap = np.array([[sort_key[i] for i in row ] for row in wmap])
-    print(new_wmap)
-
-    bvals = [0., 0.2, 0.4, 0.6, 0.8, 1]
-    tickvals = [0.1,0.3,0.5,0.7,0.9]
-    ticktext = ['Unbonded', 'FF','BB','AA','PCM']
-    colors = [ 'rgb(0,0,0)','rgb(255,165,0)', 'rgb(255,0,0)', 'rgb(0,0,255)', 'rgb(0,165,255)']
-
+def plot_wafer_map(wmap, rcid_map, sort_bin):
+    colors = px.colors.qualitative.Alphabet[:len(sort_bin.keys())]
+    bvals = range(len(sort_bin.keys())+1)
+    print(len(colors), len(bvals))
     dcolorsc = discrete_colorscale(bvals, colors)
+    sort_key = {"__":np.nan}
+    print('bvals',list(bvals))
+
+    #print(new_wmap)
+    bvals = np.array(bvals)
+    #tickvals = [(dcolorsc[2*k][0]+dcolorsc[2*k+1][0])/2 for k in range(len(bvals) - 1)]
+    tickvals = [np.mean(bvals[k:k + 2]) for k in
+                range(len(bvals) - 1)]  # position with respect to bvals where ticktext is displayed
+    print(tickvals)
+    ticktext = list(sort_bin.keys())
+    for i, val in zip(sort_bin.keys(), bvals):
+        sort_key[sort_bin[i]] = val
+    sort_key[sort_bin[list(sort_bin.keys())[-1]]] = bvals[-1]
+    new_wmap = np.array([[sort_key[i] for i in row ] for row in wmap])
+    print(ticktext)
     print(dcolorsc)
     rcid_map = [[tx.replace("_", "") for tx in row] for row in rcid_map]
 
@@ -76,6 +87,22 @@ def plot_wafer_map(wmap, rcid_map, sort_key):
     return fig
 
 
+def plot_wafer_map_sns(wmap, sort_bin):
+    cmap = sns.color_palette("tab10", len(sort_bin.keys()))
+    bvals = range(len(sort_bin.keys())+1)
+    sort_key = {"__":np.nan}
+    for i, val in zip(sort_bin.keys(), bvals):
+        sort_key[sort_bin[i]] = val
+    sort_key[sort_bin[list(sort_bin.keys())[-1]]] = bvals[-1]
+    new_wmap = np.array([[sort_key[i] for i in row ] for row in wmap])
+    fig, ax = plt.subplots()
+    sns.heatmap(new_wmap, cmap = cmap, linewidths=.5, linecolor='white', ax = ax,xticklabels=False, yticklabels=False)
+    colorbar = ax.collections[0].colorbar
+    r = colorbar.vmax - colorbar.vmin
+    n = len(sort_bin.keys())
+    colorbar.set_ticks([colorbar.vmin + 0.5 * r / (n) + r * i / (n) for i in range(n)])
+    colorbar.set_ticklabels(list(sort_bin.keys()))
+    return fig
 
 
 def fill_wafer_map_rcid(nrow, ncol, retmap):

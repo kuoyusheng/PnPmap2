@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from create_map import fill_wafer_map,plot_wafer_map, fill_wafer_map_rcid
+from create_map import fill_wafer_map,plot_wafer_map, fill_wafer_map_rcid, plot_wafer_map_sns
 import numpy as np
 
 retmap = np.array([['A', 'B'], ['C', 'D'], ['E', 'F'], ['G', 'H'], ['I', 'J']])
@@ -35,7 +35,11 @@ uploaded_file = st.sidebar.file_uploader(
 if uploaded_file is not None:
     # Can be used wherever a "file-like" object is accepted:
     yield_df = pd.read_csv(uploaded_file)
-    #st.write(yield_df)
+    bin_category = yield_df['PIC Grade'].unique().tolist()
+    sort_bin = {'unbonded': "01", 'PCM': "@@"}
+    for i in bin_category:
+        sort_bin[i] = "{}{}".format(i, i)
+
 
     # Add Wafer select
     lot = st.sidebar.text_input("LOT",placeholder = "L000000")
@@ -55,9 +59,12 @@ if uploaded_file is not None:
     if clicked is not None:
         st.header("Wafer Map")
         st.subheader('LOT:{} Wafer:{}'.format(lot, wafer_select))
-        wmap = fill_wafer_map(yield_df[yield_df.Wafer == int(wafer_select)],ReticleRow,ReticleCol,retmap, sort_bin)
+        st.subheader('Sort Group:{}'.format(list(sort_bin.keys())))
+        wmap = fill_wafer_map(yield_df[yield_df.Wafer == int(wafer_select)], ReticleRow, ReticleCol, retmap, sort_bin)
         rcid_map = fill_wafer_map_rcid(ReticleRow, ReticleCol, retmap)
-        wmap_fig = plot_wafer_map(wmap,rcid_map, sort_key = sort_key)
+        #wmap_fig = plot_wafer_map(wmap,rcid_map, sort_bin)
+        #st.write(wmap_fig)
+        wmap_fig = plot_wafer_map_sns(wmap, sort_bin)
         st.write(wmap_fig)
         wmap_txt = create_sinf(wmap, lot, wafer_select, )
         rcid_txt = create_rcid(rcid_map,lot, wafer_select,)
