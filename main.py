@@ -59,7 +59,7 @@ if uploaded_file is not None:
     if clicked is not None:
         st.header("Wafer Map")
         st.subheader('LOT:{} Wafer:{}'.format(lot, wafer_select))
-        st.subheader('Sort Group:{}'.format(list(sort_bin.keys())))
+        #st.subheader('Sort Group:{}'.format(list(sort_bin.keys())))
         wmap = fill_wafer_map(yield_df[yield_df.Wafer == int(wafer_select)], ReticleRow, ReticleCol, retmap, sort_bin)
         rcid_map = fill_wafer_map_rcid(ReticleRow, ReticleCol, retmap)
         #wmap_fig = plot_wafer_map(wmap,rcid_map, sort_bin)

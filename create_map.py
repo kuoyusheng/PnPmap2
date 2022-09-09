@@ -89,11 +89,11 @@ def plot_wafer_map(wmap, rcid_map, sort_bin):
 
 def plot_wafer_map_sns(wmap, sort_bin):
     cmap = sns.color_palette("tab10", len(sort_bin.keys()))
-    bvals = range(len(sort_bin.keys())+1)
+    bvals = range(len(sort_bin.keys()))
     sort_key = {"__":np.nan}
-    for i, val in zip(sort_bin.keys(), bvals):
+    for i, val in zip(sorted(sort_bin.keys())[::-1], bvals):
         sort_key[sort_bin[i]] = val
-    sort_key[sort_bin[list(sort_bin.keys())[-1]]] = bvals[-1]
+    #sort_key[sort_bin[list(sort_bin.keys())[-1]]] = bvals[-1]
     new_wmap = np.array([[sort_key[i] for i in row ] for row in wmap])
     fig, ax = plt.subplots()
     sns.heatmap(new_wmap, cmap = cmap, linewidths=.5, linecolor='white', ax = ax,xticklabels=False, yticklabels=False)
@@ -101,7 +101,7 @@ def plot_wafer_map_sns(wmap, sort_bin):
     r = colorbar.vmax - colorbar.vmin
     n = len(sort_bin.keys())
     colorbar.set_ticks([colorbar.vmin + 0.5 * r / (n) + r * i / (n) for i in range(n)])
-    colorbar.set_ticklabels(list(sort_bin.keys()))
+    colorbar.set_ticklabels(sorted(list(sort_bin.keys()))[::-1])
     return fig
 
 
