@@ -21,9 +21,10 @@ def discrete_colorscale(bvals, colors):
         dcolorscale.extend([[nvals[k], colors[k]], [nvals[k + 1], colors[k]]])
     return dcolorscale
 
-def fill_wafer_map(df, nrow, ncol, retmap, sort_bin):
+def fill_wafer_map(df, nrow, ncol, retmap, sort_bin, blackout_str ):
     map = np.full((nrow*retmap.shape[0], ncol*retmap.shape[1]),"__")
-    blackout = [(1,1),(1,2),(1,8),(1,9),(1,10), (2,1),(2,10),(7,1),(7,10),(8,1),(8,2),(8,8),(8,9),(8,10)]
+    #blackout = [(1,1),(1,2),(1,8),(1,9),(1,10), (2,1),(2,10),(7,1),(7,10),(8,1),(8,2),(8,8),(8,9),(8,10)]
+    blackout = [eval(blackout_str)]
     df['did'] = df.Row.astype(str)+"-"+df.Column.astype(str)+"-"+df.Die
     for r in range(nrow):
         for c in range(ncol):

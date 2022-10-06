@@ -51,6 +51,8 @@ if uploaded_file is not None:
     ReticleCol = st.sidebar.number_input("Reticle Col Number:", value = 10, format='%i')
     dieRow = st.sidebar.number_input('Die Row number:', value = 5, format = '%i')
     dieCol = st.sidebar.number_input('Die Col number:', value = 2, format = '%i')
+    blackout_str = st.sidebar.numner_input('Black out reticle', value =
+    "(1,1),(1,2),(1,8),(1,9),(1,10), (2,1),(2,10),(7,1),(7,10),(8,1),(8,2),(8,8),(8,9),(8,10)")
     # Add sort rule
     # rule = st.sidebar.text_input('Sort Rule', placeholder='Write sort rule based on python logic, seperated by newline("\n")')
 
