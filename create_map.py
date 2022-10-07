@@ -21,10 +21,11 @@ def discrete_colorscale(bvals, colors):
         dcolorscale.extend([[nvals[k], colors[k]], [nvals[k + 1], colors[k]]])
     return dcolorscale
 
-def fill_wafer_map(df, nrow, ncol, retmap, sort_bin, blackout_str ):
+def fill_wafer_map(df, nrow, ncol, retmap, sort_bin, blackout_str ,PCM_row,PCM_col):
     map = np.full((nrow*retmap.shape[0], ncol*retmap.shape[1]),"__")
     #blackout = [(1,1),(1,2),(1,8),(1,9),(1,10), (2,1),(2,10),(7,1),(7,10),(8,1),(8,2),(8,8),(8,9),(8,10)]
-    blackout = [eval(blackout_str)]
+    blackout = list(eval(blackout_str))
+    print(blackout)
     df['did'] = df.Row.astype(str)+"-"+df.Column.astype(str)+"-"+df.Die
     for r in range(nrow):
         for c in range(ncol):
@@ -33,7 +34,7 @@ def fill_wafer_map(df, nrow, ncol, retmap, sort_bin, blackout_str ):
             reticle = "R{}C{}".format(r+1, c+1)
             if reticle not in df.Reticle.unique():
                 map[r*retmap.shape[0]:(r+1)*retmap.shape[0], c*retmap.shape[1]:(c+1)*retmap.shape[1]] = sort_bin['unbonded']
-                map[(r+1)*retmap.shape[0]-1, (c+1)*retmap.shape[1]-1] = sort_bin['PCM']
+                map[(r)*retmap.shape[0]+PCM_row-1, (c)*retmap.shape[1]+PCM_col-1] = sort_bin['PCM']
             else:
                 for rr in range(retmap.shape[0]):
                     for rc in range(retmap.shape[1]):
@@ -42,7 +43,7 @@ def fill_wafer_map(df, nrow, ncol, retmap, sort_bin, blackout_str ):
                             map[r*retmap.shape[0]+rr, c*retmap.shape[1]+rc] = sort_bin[df.loc[df.did == die, "PIC Grade"].values[0]]
                         else:
                             map[r* retmap.shape[0]+rr, c * retmap.shape[1] + rc] = sort_bin['unbonded']
-                        map[(r+1)*retmap.shape[0]-1, (c+1)*retmap.shape[1]-1] = sort_bin['PCM']
+                        map[(r)*retmap.shape[0]+PCM_row-1, (c)*retmap.shape[1]+PCM_col-1] = sort_bin['PCM']
     return map
 
 def create_color_map(sort_bin):

@@ -4,10 +4,11 @@ from create_map import fill_wafer_map,plot_wafer_map, fill_wafer_map_rcid, plot_
 import numpy as np
 
 retmap = np.array([['A', 'B'], ['C', 'D'], ['E', 'F'], ['G', 'H'], ['I', 'J']])
+ret_name = ['A',"B","C","D",'E','F',"G",'H',"I","J","K","L","M","N","O","P"]
 sort_bin = {1: 'AA', 0.5: 'BB', 0.25:'CC',0.1:'DD', 0: "FF", 'unbonded': "01", 'PCM': "@@"}
 sort_key = {"__": np.nan, "01": 0.1, "FF":0.2, "BB":0.3, "AA":0.4,'CC':0.6,'DD':0.7, "@@":0.9}
 st.set_page_config(layout="wide")
-
+erica = [(1,1),(1,2),(1,7),(1,8),(1,10), (2,1),(2,8),(6,1),(6,8),(7,1),(7,2),(7,7),(7,8)]
 
 def create_sinf(wafermap, lot, wafer):
     wmap_txt = "DEVICE:MSK-00280\nPART#:313-00021\nLOT:{}\nWAFER:{}\nFNLOC:180\nROWCT:40\nCOLCT:20\nBCEQU:00\nDUTMS:um\nXDIES:7958\nYDIES:4150\nShotMap\n".format(lot, wafer)
@@ -51,6 +52,8 @@ if uploaded_file is not None:
     ReticleCol = st.sidebar.number_input("Reticle Col Number:", value = 10, format='%i')
     dieRow = st.sidebar.number_input('Die Row number:', value = 5, format = '%i')
     dieCol = st.sidebar.number_input('Die Col number:', value = 2, format = '%i')
+    PCM_row = st.sidebar.number_input('PCM Row loc', value = 5)
+    PCM_col = st.sidebar.number_input('PCM Col loc', value = 2)
     blackout_str = st.sidebar.text_area('Black out reticle', value =
     "(1,1),(1,2),(1,8),(1,9),(1,10), (2,1),(2,10),(7,1),(7,10),(8,1),(8,2),(8,8),(8,9),(8,10)")
     # Add sort rule
@@ -62,7 +65,9 @@ if uploaded_file is not None:
         st.header("Wafer Map")
         st.subheader('LOT:{} Wafer:{}'.format(lot, wafer_select))
         #st.subheader('Sort Group:{}'.format(list(sort_bin.keys())))
-        wmap = fill_wafer_map(yield_df[yield_df.Wafer == int(wafer_select)], ReticleRow, ReticleCol, retmap, sort_bin, blackout_str )
+        retmap = np.array(ret_name[:dieRow*dieCol]).reshape((dieRow, dieCol))
+        print(retmap)
+        wmap = fill_wafer_map(yield_df[yield_df.Wafer == int(wafer_select)], ReticleRow, ReticleCol, retmap, sort_bin, blackout_str ,PCM_row,PCM_col)
         rcid_map = fill_wafer_map_rcid(ReticleRow, ReticleCol, retmap)
         #wmap_fig = plot_wafer_map(wmap,rcid_map, sort_bin)
         #st.write(wmap_fig)
