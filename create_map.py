@@ -11,6 +11,7 @@ def discrete_colorscale(bvals, colors):
     colors - list of rgb or hex colorcodes for values in [bvals[k], bvals[k+1]],0<=k < len(bvals)-1
     returns the plotly  discrete colorscale
     """
+
     if len(bvals) != len(colors) + 1:
         raise ValueError('len(boundary values) should be equal to  len(colors)+1 while now {} {}'.format(len(bvals), len(colors)))
     bvals = sorted(bvals)
