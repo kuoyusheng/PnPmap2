@@ -57,6 +57,7 @@ if uploaded_file is not None:
     blackout_str = st.sidebar.text_area('Black out reticle', value =
     "(1,1),(1,2),(1,8),(1,9),(1,10), (2,1),(2,10),(7,1),(7,10),(8,1),(8,2),(8,8),(8,9),(8,10)")
     # Add sort rule
+
     # rule = st.sidebar.text_input('Sort Rule', placeholder='Write sort rule based on python logic, seperated by newline("\n")')
 
     clicked = st.sidebar.button(label="Plot", )
