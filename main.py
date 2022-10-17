@@ -21,7 +21,7 @@ def create_sinf(wafermap, lot, wafer):
 
 
 def create_rcid(rcidmap, lot, wafer):
-    wmap_txt = "DEVICE:MSK-00280\nPART#:313-00021\nLOT:{}\nWAFER:{}\nFNLOC:180\nROWCT:40\nCOLCT:20\nBCEQU:00\nDUTMS:um\nXDIES:7958\nYDIES:4150\nShotMap\n".format(lot, wafer)
+    wmap_txt = "DEVICE:MSK-00280\nPart#:313-00021\nLOT:{}\nWAFER:{}\nFNLOC:180\nROWCT:40\nCOLCT:20\nBCEQU:00\nDUTMS:um\nXDIES:7958\nYDIES:4150\nShotMap\n".format(lot, wafer)
     for row in rcidmap:
         wmap_txt += "RowData:"
         w = ' '.join(str(cell) for cell in row)
