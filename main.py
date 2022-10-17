@@ -12,7 +12,7 @@ st.set_page_config(layout="wide")
 erica = [(1,1),(1,2),(1,7),(1,8),(1,10), (2,1),(2,8),(6,1),(6,8),(7,1),(7,2),(7,7),(7,8)]
 
 def create_sinf(wafermap, lot, wafer):
-    wmap_txt = "DEVICE:MSK-00280\nPART#:313-00021\nLOT:{}\nWAFER:{}\nFNLOC:180\nROWCT:40\nCOLCT:20\nBCEQU:00\nDUTMS:um\nXDIES:7958\nYDIES:4150\nShotMap\n".format(lot, wafer)
+    wmap_txt = "DEVICE:MSK-00280\nPart#:313-00021\nLOT:{}\nWAFER:{}\nFNLOC:180\nROWCT:40\nCOLCT:20\nBCEQU:00\nDUTMS:um\nXDIES:7958\nYDIES:4150\nShotMap\n".format(lot, wafer)
     for row in wafermap:
         wmap_txt += "RowData:"
         w = ' '.join(str(cell) for cell in row)
