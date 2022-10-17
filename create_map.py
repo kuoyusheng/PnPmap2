@@ -129,7 +129,7 @@ if __name__ == '__main__':
         df = raw_df[raw_df.Wafer == wafer]
         print(df)
         upfront_text = """DEVICE:MSK-00280
-PART#:313-00021
+Part#:313-00021
 LOT:{}
 WAFER:{}
 FNLOC:180
