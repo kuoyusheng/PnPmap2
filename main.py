@@ -4,7 +4,8 @@ from create_map import fill_wafer_map,plot_wafer_map, fill_wafer_map_rcid, plot_
 import numpy as np
 
 retmap = np.array([['A', 'B'], ['C', 'D'], ['E', 'F'], ['G', 'H'], ['I', 'J']])
-ret_name = ['A',"B","C","D",'E','F',"G",'H',"I","J","K","L","M","N","O","P"]
+#ret_name = ['A',"B","C","D",'E','F',"G",'H',"I","J","K","L","M","N","O","P"]
+ret_name = ["D"+str(x).zfill(2) for x in range(1,100)]
 sort_bin = {1: 'AA', 0.5: 'BB', 0.25:'CC',0.1:'DD', 0: "FF", 'unbonded': "01", 'PCM': "@@"}
 sort_key = {"__": np.nan, "01": 0.1, "FF":0.2, "BB":0.3, "AA":0.4,'CC':0.6,'DD':0.7, "@@":0.9}
 st.set_page_config(layout="wide")
